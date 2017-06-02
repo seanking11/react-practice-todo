@@ -65,7 +65,7 @@ class App extends Component{
     );
   }
 }
-
+// Input fields
 class Input extends Component {
   constructor(props) {
     super(props);

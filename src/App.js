@@ -31,6 +31,8 @@ class App extends Component{
     this.state = {
       todos
     };
+
+    this.handleAddTodo = this.handleAddTodo.bind(this);
   }
 
   handleRemoveTodo(index) {
@@ -41,10 +43,16 @@ class App extends Component{
     })
   }
 
+  handleAddTodo(todo) {
+    this.setState({
+      todos: [...this.state.todos, todo]
+    });
+  }
+
   render() {
     return (
       <div className="container">
-        <Input></Input>
+        <Input onAddTodo={this.handleAddTodo}></Input>
         <hr />
         <h4>Todo Count: <span className="badge">{this.state.todos.length}</span></h4>
         <ul className="list-group">
@@ -61,7 +69,6 @@ class App extends Component{
           )}
         </ul>
       </div>
-
     );
   }
 }
@@ -76,6 +83,30 @@ class Input extends Component {
       description: '',
       priority: 'Lowest'
     }
+
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.props.onAddTodo(this.state);
+    this.setState({
+      title: '',
+      responsible: '',
+      description: '',
+      priority: 'Lowest'
+    });
   }
 
     render() {
@@ -86,7 +117,7 @@ class Input extends Component {
             <div className="form-group">
               <label htmlFor="inputTodoTitle" className="col-sm-2 control-label">To-Do</label>
               <div className="col-sm-10">
-                <input  name="todoTitle"
+                <input  name="title"
                         type="text"
                         className="form-control"
                         id="inputTodoTitle"
@@ -98,7 +129,7 @@ class Input extends Component {
             <div className="form-group">
               <label htmlFor="inputTodoResponsible" className="col-sm-2 control-label">Responsible</label>
               <div className="col-sm-10">
-                <input  name="todoResponsible"
+                <input  name="responsible"
                         type="text"
                         className="form-control"
                         id="inputTodoResponsible"
@@ -110,7 +141,7 @@ class Input extends Component {
             <div className="form-group">
               <label htmlFor="inputTodoDescription" className="col-sm-2 control-label">Description</label>
               <div className="col-sm-10">
-                <textarea name="todoDescription"
+                <textarea name="description"
                           type="text"
                           className="form-control"
                           id="inputTodoDescription"
@@ -122,7 +153,7 @@ class Input extends Component {
             <div className="form-group">
               <label htmlFor="inputTodoPriority" className="col-sm-2 control-label">Priority</label>
               <div className="col-sm-10">
-                <select name="todoPriority"
+                <select name="priority"
                         className="form-control"
                         id="inputTodoPriority"
                         value={this.state.priority}
@@ -133,6 +164,11 @@ class Input extends Component {
                   <option>High</option>
                   <option>Highest</option>
                 </select>
+              </div>
+            </div>
+            <div className="form-group">
+              <div className="col-sm-offset-2 col-sm-10">
+                <button type="submit" className="btn btn-success">Add To-Do</button>
               </div>
             </div>
           </form>
